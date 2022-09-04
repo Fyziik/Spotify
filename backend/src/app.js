@@ -3,13 +3,14 @@ const express = require('express')
 const app = express()
 const { MongoClient, ServerApiVersion } = require('mongodb');
 
-const uri = "mongodb+srv://Fyziik:<password>@cluster0.n60inow.mongodb.net/?retryWrites=true&w=majority";
+const client = new MongoClient(process.env.DB_URI, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
 
-const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-
-client.connect(err => {
-  const collection = client.db("test").collection("devices");
+client.connect(async err => {
+  const collection = client.db("spotify").collection("songs");
   // perform actions on the collection object
+  await collection.find({}).toArray().then(data => {
+    console.log(data)
+  })
   client.close();
 });
 
